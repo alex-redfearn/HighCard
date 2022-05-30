@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TechnicalAssesment
+﻿namespace TechnicalAssesment
 {
     public enum GameResult
     {
-        GameNotStarted,
         DealerWon,
         PlayerWon,
         Tie,
@@ -13,115 +9,123 @@ namespace TechnicalAssesment
 
     public class ScoreBoard
     {
-        public byte playerWins;
-        public int DealerWins;
+        public byte PlayerWins { get; set; }
+        public int DealerWins { get; set; }
         public byte Ties { get; set; }
     }
 
     public class Deck
     {
-        public List<int> cards;
-        public int MaxCards = 52;
+        private readonly List<int> _cards;
+        private static readonly int MAX_CARDS = 52;
+
         public Deck()
         {
-            cards = new List<int>();
+            _cards = new List<int>();
         }
 
         public void Shuffle()
         {
-            for (int i = 0; i < MaxCards; i++)
+            for (int i = 0; i < MAX_CARDS; i++)
             {
-                cards.Add(i);
+                _cards.Add(i);
             }
         }
 
         public int DrawCard()
         {
-            Random r = new Random();
-            int index = r.Next(MaxCards);
-            int selectedCard = cards[index];
-            cards.RemoveAt(index);
+            if (CardsEmpty())
+            {
+                Shuffle();
+            }
+
+            Random r = new();
+            int index = r.Next(_cards.Count);
+            int selectedCard = _cards[index];
+            _cards.RemoveAt(index);
             return selectedCard;
         }
 
-        public GameResult determineWinResult(int PlayerCard, int DealerCard)
+        private bool CardsEmpty()
         {
-            GameResult result = new GameResult();
-            if (PlayerCard % 13 > DealerCard % 13)
+            return !_cards.Any();
+        }
+
+        public static GameResult DetermineWinResult(int playerCard, int dealerCard)
+        {
+            if (playerCard % 13 > dealerCard % 13)
             {
-                result = GameResult.PlayerWon;
+                return GameResult.PlayerWon;
             }
-            else if (PlayerCard % 12 < DealerCard % 13)
+            else if (playerCard % 13 < dealerCard % 13)
             {
-                result = GameResult.DealerWon;
+                return GameResult.DealerWon;
             }
-            else
-                result = GameResult.Tie;
-            return result;
+            else return GameResult.Tie;
         }
     }
 
     public class Game
     {
-        public ScoreBoard ScoreBoard;
-        public Deck deck;
+        private readonly ScoreBoard _scoreBoard;
+        private Deck _deck = default!;
 
-        private byte DealerCard;
-        private byte PlayerCard;
+        private int _dealerCard;
+        private int _playerCard;
 
         public Game()
         {
-            ScoreBoard = new ScoreBoard();
+            _scoreBoard = new ScoreBoard();
         }
 
-        internal void Play(int numGames)
+        public void Play(int numGames)
         {
-            deck = new Deck();
+            _deck = new Deck();
+
             ShuffleDeck();
 
-            while (--numGames > 0)
+            while (--numGames >= 0)
             {
                 DealCards();
                 GameResult result = DetermineResult();
                 switch (result)
                 {
                     case GameResult.DealerWon:
-                        ScoreBoard.DealerWins++;
+                        _scoreBoard.DealerWins++;
                         Console.WriteLine($"{numGames}: Dealer");
 
                         break;
 
                     case GameResult.PlayerWon:
-                        ScoreBoard.playerWins++;
+                        _scoreBoard.PlayerWins++;
                         Console.WriteLine($"{numGames}: Player");
                         break;
 
                     case GameResult.Tie:
-                        ScoreBoard.Ties++;
+                        _scoreBoard.Ties++;
                         Console.WriteLine($"{numGames}: Tie");
                         break;
                 }
 
             }
 
-            Console.WriteLine($"RESULTS\n\tDealerWins: {ScoreBoard.DealerWins}\n\tPlayerWins: {ScoreBoard.playerWins}\n\tTies: {ScoreBoard.Ties}\n");
-
+            Console.WriteLine($"RESULTS\n\tDealerWins: {_scoreBoard.DealerWins}\n\tPlayerWins: {_scoreBoard.PlayerWins}\n\tTies: {_scoreBoard.Ties}\n");
         }
 
         private void ShuffleDeck()
         {
-            deck.Shuffle();
+            _deck.Shuffle();
         }
 
         private void DealCards()
         {
-            DealerCard = (byte)deck.DrawCard();
-            PlayerCard = (byte)deck.DrawCard();
+            _playerCard = _deck.DrawCard();
+            _dealerCard = _deck.DrawCard();           
         }
 
         private GameResult DetermineResult()
         {
-            return deck.determineWinResult(DealerCard, PlayerCard);
+            return Deck.DetermineWinResult(_playerCard, _dealerCard);
         }
     }
 
@@ -130,7 +134,6 @@ namespace TechnicalAssesment
         static void Main(string[] args)
         {
             var game = new Game();
-            // Need to either pass this in command line args or set it as a config value.
             game.Play(1000);
         }
     }
