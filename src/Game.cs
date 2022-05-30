@@ -1,70 +1,5 @@
-﻿namespace TechnicalAssesment
+﻿namespace HighCard
 {
-    public enum GameResult
-    {
-        DealerWon,
-        PlayerWon,
-        Tie,
-    }
-
-    public class ScoreBoard
-    {
-        public byte PlayerWins { get; set; }
-        public int DealerWins { get; set; }
-        public byte Ties { get; set; }
-    }
-
-    public class Deck
-    {
-        private readonly List<int> _cards;
-        private static readonly int MAX_CARDS = 52;
-
-        public Deck()
-        {
-            _cards = new List<int>();
-        }
-
-        public void Shuffle()
-        {
-            for (int i = 0; i < MAX_CARDS; i++)
-            {
-                _cards.Add(i);
-            }
-        }
-
-        public int DrawCard()
-        {
-            if (CardsEmpty())
-            {
-                Shuffle();
-            }
-
-            Random r = new();
-            int index = r.Next(_cards.Count);
-            int selectedCard = _cards[index];
-            _cards.RemoveAt(index);
-            return selectedCard;
-        }
-
-        private bool CardsEmpty()
-        {
-            return !_cards.Any();
-        }
-
-        public static GameResult DetermineWinResult(int playerCard, int dealerCard)
-        {
-            if (playerCard % 13 > dealerCard % 13)
-            {
-                return GameResult.PlayerWon;
-            }
-            else if (playerCard % 13 < dealerCard % 13)
-            {
-                return GameResult.DealerWon;
-            }
-            else return GameResult.Tie;
-        }
-    }
-
     public class Game
     {
         private readonly ScoreBoard _scoreBoard;
@@ -126,15 +61,6 @@
         private GameResult DetermineResult()
         {
             return Deck.DetermineWinResult(_playerCard, _dealerCard);
-        }
-    }
-
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            var game = new Game();
-            game.Play(1000);
         }
     }
 }
