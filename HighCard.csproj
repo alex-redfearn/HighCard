@@ -9,8 +9,12 @@
 
   <ItemGroup>
     <None Remove="src\" />
+    <None Remove="System.Configuration.ConfigurationManager" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
 </Project>

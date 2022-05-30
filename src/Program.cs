@@ -1,11 +1,14 @@
-﻿namespace HighCard
+﻿using System.Configuration;
+
+namespace HighCard
 {
     class Program
     {
         static void Main()
         {
             Game game = new();
-            game.Play(1000);
+            int games = int.Parse(ConfigurationManager.AppSettings.Get("NumberOfGames") ?? "52");
+            game.Play(games);
         }
     }
 }
