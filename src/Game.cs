@@ -17,11 +17,12 @@
         {
             _deck = new Deck();
 
-            ShuffleDeck();
+            _deck.Shuffle();
 
             while (--numGames >= 0)
             {
                 DealCards();
+
                 GameResult result = DetermineResult();
                 switch (result)
                 {
@@ -45,11 +46,6 @@
             }
 
             Console.WriteLine($"RESULTS\n\tDealerWins: {_scoreBoard.DealerWins}\n\tPlayerWins: {_scoreBoard.PlayerWins}\n\tTies: {_scoreBoard.Ties}\n");
-        }
-
-        private void ShuffleDeck()
-        {
-            _deck.Shuffle();
         }
 
         private void DealCards()

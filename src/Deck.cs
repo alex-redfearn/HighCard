@@ -8,9 +8,11 @@
         public Deck()
         {
             _cards = new List<int>();
+
+            AddCards();
         }
 
-        public void Shuffle()
+        private void AddCards()
         {
             for (int i = 0; i < MAX_CARDS; i++)
             {
@@ -18,17 +20,34 @@
             }
         }
 
+        // Fisher-Yates Shuffle
+        public void Shuffle()
+        {
+            Random r = new();
+
+            int n = _cards.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = r.Next(n + 1);
+                int value = _cards[k];
+                _cards[k] = _cards[n];
+                _cards[n] = value;
+            }
+        }
+
         public int DrawCard()
         {
             if (CardsEmpty())
             {
+                AddCards();
                 Shuffle();
             }
 
-            Random r = new();
-            int index = r.Next(_cards.Count);
+            int index = _cards.Count - 1;
             int selectedCard = _cards[index];
             _cards.RemoveAt(index);
+
             return selectedCard;
         }
 
