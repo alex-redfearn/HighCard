@@ -10,11 +10,21 @@
   <ItemGroup>
     <None Remove="src\" />
     <None Remove="System.Configuration.ConfigurationManager" />
+    <None Remove="xunit" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="HighCardTests\obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.cs" />
+    <Compile Remove="HighCardTests\obj\Debug\net6.0\HighCardTests.AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="HighCardTests\obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.cs" />
+    <Content Include="HighCardTests\obj\Debug\net6.0\HighCardTests.AssemblyInfo.cs" />
   </ItemGroup>
 </Project>
