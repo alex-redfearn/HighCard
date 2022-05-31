@@ -2,8 +2,8 @@
 {
     public class ScoreBoard
     {
-        public byte PlayerWins { get; set; }
+        public int PlayerWins { get; set; }
         public int DealerWins { get; set; }
-        public byte Ties { get; set; }
+        public int Ties { get; set; }
     }
 }
